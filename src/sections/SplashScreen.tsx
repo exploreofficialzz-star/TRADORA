@@ -32,7 +32,7 @@ export default function SplashScreen() {
             {/* Icon + name — all appear together */}
             <motion.div
               className="flex flex-col items-center px-8"
-              style={{ marginTop: '-80px' }}
+              style={{ marginTop: '-160px' }}
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 18 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
