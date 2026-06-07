@@ -66,36 +66,25 @@ export default function HomeScreen() {
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
       {/* Header */}
       <header className="sticky top-0 z-40 glass px-4 py-3">
-        <div className="flex items-center gap-3">
-          {/* Logo + brand name */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <img
-              src={tradoaLogo}
-              alt="Tradora"
-              style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }}
-            />
-            <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 16, letterSpacing: '0.03em' }}
-              className="text-gray-900 dark:text-white"
-            >
-              TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
-            </span>
-          </div>
-          {/* Search bar — moderate width */}
-          <div className="flex-1 relative">
-            <button
-              onClick={() => navigate('search')}
-              className="w-full flex items-center gap-2 bg-muted rounded-xl px-3 py-2 text-xs text-muted-foreground"
-            >
-              <Search className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Search products & services...</span>
+        <div className="flex items-center justify-between">
+          {/* Brand name only — no icon */}
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: '0.03em', lineHeight: 1 }}
+            className="text-gray-900 dark:text-white"
+          >
+            TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
+          </span>
+          {/* Right icons: search + bell */}
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate('search')} className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted">
+              <Search className="w-4.5 h-4.5 text-foreground" />
+            </button>
+            <button className="relative w-9 h-9 flex items-center justify-center">
+              <Bell className="w-5 h-5 text-foreground" />
+              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">
+                3
+              </span>
             </button>
           </div>
-          <button className="relative w-9 h-9 flex items-center justify-center flex-shrink-0">
-            <Bell className="w-5 h-5 text-foreground" />
-            <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">
-              3
-            </span>
-          </button>
         </div>
       </header>
 
@@ -103,38 +92,65 @@ export default function HomeScreen() {
       <motion.section
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative h-52 mx-4 mt-4 rounded-2xl overflow-hidden"
+        className="relative mx-4 mt-4 rounded-2xl overflow-hidden"
+        sx={{ height: '200px' }}
       >
-        <img
-          src="/hero-banner.jpg"
-          alt="Premium marketplace"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center px-6">
-          <motion.span
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-primary text-xs font-bold tracking-wider uppercase mb-1"
-          >
-            Premium Marketplace
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-white text-2xl font-bold leading-tight"
-          >
-            Discover Local<br />Excellence
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/70 text-sm mt-2"
-          >
-            Shop, sell & book services
-          </motion.p>
+        <div className="relative h-48 rounded-2xl overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #0D1117 0%, #1a1f2e 50%, #0D1117 100%)' }}
+        >
+          {/* Decorative orange glow blobs */}
+          <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-20"
+            style={{ background: 'radial-gradient(circle, #FB8C00, transparent)', filter: 'blur(30px)', transform: 'translate(20%, -20%)' }}
+          />
+          <div className="absolute bottom-0 left-1/2 w-32 h-32 rounded-full opacity-10"
+            style={{ background: 'radial-gradient(circle, #FFA726, transparent)', filter: 'blur(25px)' }}
+          />
+          {/* Grid overlay */}
+          <div className="absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+            }}
+          />
+          <div className="absolute inset-0 flex flex-col justify-center px-6">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 mb-2"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+              <span className="text-orange-400 text-[10px] font-bold tracking-[0.25em] uppercase">
+                Tradora Online Marketplace
+              </span>
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-white font-bold leading-tight"
+              style={{ fontSize: 22 }}
+            >
+              Buy. Sell. Connect.<br />
+              <span style={{ color: '#FB8C00' }}>All in one place.</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-white/50 text-xs mt-2"
+            >
+              Shop products & book services near you
+            </motion.p>
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-3 self-start px-4 py-1.5 rounded-lg text-xs font-bold text-white"
+              style={{ background: 'linear-gradient(90deg, #FB8C00, #FFA726)' }}
+            >
+              Explore Now →
+            </motion.button>
+          </div>
         </div>
       </motion.section>
 
