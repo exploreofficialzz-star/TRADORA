@@ -2,9 +2,9 @@ import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { products, services, productCategories, serviceCategories, sellers, providers, testimonials } from '@/data';
+import tradoaLogo from '@/assets/tradora-logo.jpg';
 import {
   Search,
-  MapPin,
   Bell,
   Star,
   Heart,
@@ -30,6 +30,7 @@ import {
   TrendingUp as Trending,
   Download,
   Quote,
+  MapPin,
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -62,23 +63,34 @@ export default function HomeScreen() {
 
   return (
     <div className="min-h-full">
+      <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
       {/* Header */}
       <header className="sticky top-0 z-40 glass px-4 py-3">
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1 text-sm font-medium text-foreground">
-            <MapPin className="w-4 h-4 text-primary" />
-            <span>Lagos, NG</span>
-          </button>
+          {/* Logo + brand name */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <img
+              src={tradoaLogo}
+              alt="Tradora"
+              style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover' }}
+            />
+            <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 16, letterSpacing: '0.03em' }}
+              className="text-gray-900 dark:text-white"
+            >
+              TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
+            </span>
+          </div>
+          {/* Search bar — moderate width */}
           <div className="flex-1 relative">
             <button
               onClick={() => navigate('search')}
-              className="w-full flex items-center gap-2 bg-muted rounded-xl px-4 py-2.5 text-sm text-muted-foreground"
+              className="w-full flex items-center gap-2 bg-muted rounded-xl px-3 py-2 text-xs text-muted-foreground"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-3.5 h-3.5 flex-shrink-0" />
               <span>Search products & services...</span>
             </button>
           </div>
-          <button className="relative w-10 h-10 flex items-center justify-center">
+          <button className="relative w-9 h-9 flex items-center justify-center flex-shrink-0">
             <Bell className="w-5 h-5 text-foreground" />
             <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">
               3
