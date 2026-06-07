@@ -64,18 +64,18 @@ export default function HomeScreen() {
     <div className="min-h-full">
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
       {/* Header */}
-      <header className="sticky top-0 z-40 glass px-4 py-3">
+      <header className="sticky top-0 z-40 px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Brand name only — no icon */}
-          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: '0.03em', lineHeight: 1 }}
+          {/* Brand name — bigger */}
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 42, letterSpacing: '0.03em', lineHeight: 1 }}
             className="text-gray-900 dark:text-white"
           >
             TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
           </span>
-          {/* Right icons: search + bell */}
+          {/* Right icons: search + bell — same size, no bg on search */}
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('search')} className="w-9 h-9 flex items-center justify-center rounded-xl bg-muted">
-              <Search className="w-4.5 h-4.5 text-foreground" />
+            <button onClick={() => navigate('search')} className="relative w-9 h-9 flex items-center justify-center">
+              <Search className="w-5 h-5 text-foreground" />
             </button>
             <button className="relative w-9 h-9 flex items-center justify-center">
               <Bell className="w-5 h-5 text-foreground" />
