@@ -32,6 +32,7 @@ export default function SplashScreen() {
             {/* Icon + name — all appear together */}
             <motion.div
               className="flex flex-col items-center px-8"
+              style={{ marginTop: '-80px' }}
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 18 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -40,16 +41,16 @@ export default function SplashScreen() {
               <img
                 src={tradoaLogo}
                 alt="Tradora Logo"
-                style={{ width: 88, height: 88, borderRadius: 20, display: 'block', objectFit: 'cover' }}
+                style={{ width: 80, height: 80, borderRadius: 18, display: 'block', objectFit: 'cover' }}
               />
 
               {/* TRADORA — tighter gap to icon */}
-              <div className="flex flex-col items-center gap-1 mt-3">
+              <div className="flex flex-col items-center gap-1 mt-2">
                 <div style={{ fontFamily: "'Exo 2', sans-serif", lineHeight: 1 }}>
-                  <span className="text-gray-900 dark:text-white" style={{ fontSize: 38, fontWeight: 800, letterSpacing: '0.05em' }}>TR</span>
-                  <span style={{ fontSize: 38, fontWeight: 800, letterSpacing: '0.05em', background: 'linear-gradient(160deg,#FFA726,#FB8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>A</span>
-                  <span className="text-gray-900 dark:text-white" style={{ fontSize: 38, fontWeight: 800, letterSpacing: '0.05em' }}>DOR</span>
-                  <span style={{ fontSize: 38, fontWeight: 800, letterSpacing: '0.05em', background: 'linear-gradient(160deg,#FFA726,#FB8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>A</span>
+                  <span className="text-gray-900 dark:text-white" style={{ fontSize: 30, fontWeight: 800, letterSpacing: '0.05em' }}>TR</span>
+                  <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: '0.05em', background: 'linear-gradient(160deg,#FFA726,#FB8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>A</span>
+                  <span className="text-gray-900 dark:text-white" style={{ fontSize: 30, fontWeight: 800, letterSpacing: '0.05em' }}>DOR</span>
+                  <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: '0.05em', background: 'linear-gradient(160deg,#FFA726,#FB8C00)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>A</span>
                 </div>
 
                 {/* BUY · SELL · CONNECT */}
