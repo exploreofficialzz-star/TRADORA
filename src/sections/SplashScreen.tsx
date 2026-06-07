@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import tradoaLogo from '@/assets/tradora-logo.jpg';
 
+const dots = [
+  { color: '#F87171' }, // red/pink
+  { color: '#34D399' }, // teal/green  
+  { color: '#FBBF24' }, // yellow
+  { color: '#60A5FA' }, // blue
+];
+
 export default function SplashScreen() {
   const { markSplashComplete } = useApp();
   const [visible, setVisible] = useState(false);
@@ -29,14 +36,14 @@ export default function SplashScreen() {
             exit={{ opacity: 0, scale: 1.04 }}
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
           >
-            {/* All content appears at exactly the same time */}
+            {/* Icon + name — all appear together */}
             <motion.div
               className="flex flex-col items-center gap-6 px-8"
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 18 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Icon — no background wrapper */}
+              {/* Icon */}
               <img
                 src={tradoaLogo}
                 alt="Tradora Logo"
@@ -62,28 +69,45 @@ export default function SplashScreen() {
                 </div>
               </div>
 
-              {/* Progress bar */}
-              <div className="overflow-hidden rounded-full" style={{ width: 140, height: 2, background: 'rgba(128,128,128,0.15)' }}>
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(90deg,#FB8C00,#FFA726)', boxShadow: '0 0 6px rgba(251,140,0,0.7)' }}
-                  initial={{ width: '0%' }}
-                  animate={{ width: visible ? '100%' : '0%' }}
-                  transition={{ duration: 4, ease: [0.4, 0, 0.2, 1] }}
-                />
+              {/* Bouncing dots loader */}
+              <div className="flex items-center gap-3 mt-2">
+                {dots.map((dot, i) => (
+                  <motion.div
+                    key={i}
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: '50%',
+                      backgroundColor: dot.color,
+                    }}
+                    animate={visible ? {
+                      y: [0, -14, 0],
+                      scale: [1, 1.15, 1],
+                    } : { y: 0 }}
+                    transition={{
+                      duration: 0.7,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: i * 0.15,
+                      repeatDelay: 0.3,
+                    }}
+                  />
+                ))}
               </div>
             </motion.div>
 
-            {/* by chAs — same animation trigger */}
+            {/* by chAs — pure black/white, no color on chAs */}
             <motion.div
               className="absolute bottom-10 left-0 right-0 flex justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: visible ? 1 : 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.05em' }}>
-                <span className="text-black dark:text-white">by </span>
-                <span style={{ color: '#FB8C00' }}>chAs</span>
+              <span
+                className="text-black dark:text-white"
+                style={{ fontFamily: "'Exo 2', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.05em' }}
+              >
+                by chAs
               </span>
             </motion.div>
           </motion.div>
