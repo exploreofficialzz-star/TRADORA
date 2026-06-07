@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { products, services, productCategories, serviceCategories, sellers, providers, testimonials } from '@/data';
-import tradoaLogo from '@/assets/tradora-logo.jpg';
 import {
   Search,
   Bell,
@@ -93,7 +92,7 @@ export default function HomeScreen() {
         ref={heroRef}
         style={{ opacity: heroOpacity, scale: heroScale }}
         className="relative mx-4 mt-4 rounded-2xl overflow-hidden"
-        sx={{ height: '200px' }}
+
       >
         <div className="relative h-48 rounded-2xl overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #0D1117 0%, #1a1f2e 50%, #0D1117 100%)' }}

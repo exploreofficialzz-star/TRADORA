@@ -31,10 +31,10 @@ export default function SellerDashboard() {
   ];
 
   const topProducts = [
-    { name: 'Luxury Gold Watch', sales: 45, revenue: 13499.55, image: '/products/watch.jpg' },
-    { name: 'Diamond Necklace', sales: 32, revenue: 15999.68, image: '/products/jewelry.jpg' },
-    { name: 'Wireless Headphones', sales: 28, revenue: 5319.72, image: '/products/headphones.jpg' },
-    { name: 'Designer Leather Bag', sales: 24, revenue: 3599.76, image: '/products/bag.jpg' },
+    { name: 'Luxury Gold Watch', sales: 45, revenue: 13499.55, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80' },
+    { name: 'Diamond Necklace', sales: 32, revenue: 15999.68, image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80' },
+    { name: 'Wireless Headphones', sales: 28, revenue: 5319.72, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80' },
+    { name: 'Designer Leather Bag', sales: 24, revenue: 3599.76, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80' },
   ];
 
   const chartData = [
