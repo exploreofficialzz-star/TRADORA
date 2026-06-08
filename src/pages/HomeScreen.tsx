@@ -66,7 +66,7 @@ export default function HomeScreen() {
           .tradora-bg {
             background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
             border-radius: 0 0 48px 0;
-            padding: 18px 36px 18px 16px;
+            padding: 15px 30px 15px 16px;
           }
           .dark .tradora-bg {
             background: linear-gradient(135deg, #161B22 0%, #1F2937 100%);
@@ -79,7 +79,7 @@ export default function HomeScreen() {
             alt="Tradora"
             style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }}
           />
-          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 34, letterSpacing: '0.04em', lineHeight: 1 }}
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 30, letterSpacing: '0.04em', lineHeight: 1 }}
             className="text-gray-900 dark:text-white"
           >
             TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
@@ -127,7 +127,7 @@ export default function HomeScreen() {
 
         {/* Goods — sellers, horizontal scroll */}
         {activeTab === 'goods' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-3 pb-3">
             {sellers.map((seller, i) => (
               <motion.div
                 key={seller.id}
@@ -175,7 +175,7 @@ export default function HomeScreen() {
 
         {/* Services — providers, horizontal scroll */}
         {activeTab === 'services' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-3 pb-3">
             {providers.map((provider, i) => (
               <motion.div
                 key={provider.id}
