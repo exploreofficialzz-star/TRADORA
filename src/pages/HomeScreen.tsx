@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { products, services, productCategories, serviceCategories, sellers, providers } from '@/data';
 import {
@@ -124,10 +124,6 @@ export default function HomeScreen() {
   const { navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'stories' | 'reels'>('stories');
   const [activeCategory, setActiveCategory] = useState<'products' | 'services'>('products');
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.08]);
 
   const categories = activeCategory === 'products' ? productCategories : serviceCategories;
   const featuredProducts = products.slice(0, 4);
