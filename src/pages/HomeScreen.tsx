@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import tradoaLogo from '@/assets/tradora-logo.jpg';
 import { motion } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import { products, services, productCategories, serviceCategories, sellers, providers } from '@/data';
@@ -59,57 +60,48 @@ export default function HomeScreen() {
     <div className="min-h-full">
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
 
-      {/* Header — market-themed background, adaptive to theme */}
-      <header className="sticky top-0 z-40">
-        {/* Market banner bg — light: warm cream gradient, dark: deep navy */}
-        <div
-          className="px-4 py-3 relative overflow-hidden"
-          style={{
-            background: 'var(--header-bg)',
-          }}
-        >
-          <style>{`
-            :root { --header-bg: linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 50%, #FFF8F0 100%); }
-            .dark { --header-bg: linear-gradient(135deg, #0D1117 0%, #161B22 50%, #0D1117 100%); }
-          `}</style>
-          {/* Decorative curved shapes */}
-          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 dark:opacity-5"
-            style={{ background: 'radial-gradient(circle, #FB8C00, transparent)' }} />
-          <div className="absolute right-10 bottom-0 w-16 h-16 rounded-full opacity-10 dark:opacity-5"
-            style={{ background: 'radial-gradient(circle, #FFA726, transparent)' }} />
-          {/* Subtle tag/price-tag shapes */}
-          <div className="absolute left-1/2 top-0 w-px h-full opacity-5 dark:opacity-10"
-            style={{ background: 'linear-gradient(to bottom, transparent, #FB8C00, transparent)' }} />
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-2">
-              {/* Small cart icon accent */}
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #FB8C00, #FFA726)' }}>
-                <ShoppingBag className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 24, letterSpacing: '0.03em', lineHeight: 1 }}
-                className="text-gray-900 dark:text-white"
-              >
-                TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button onClick={() => navigate('search')} className="relative w-9 h-9 flex items-center justify-center">
-                <Search className="w-5 h-5 text-gray-700 dark:text-white" />
-              </button>
-              <button className="relative w-9 h-9 flex items-center justify-center">
-                <Bell className="w-5 h-5 text-gray-700 dark:text-white" />
-                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">3</span>
-              </button>
-            </div>
-          </div>
+      {/* Header — bg ONLY behind TRADORA, curved bottom-right, icons outside */}
+      <header className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+        <style>{`
+          .tradora-bg {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border-radius: 12px 40px 40px 12px;
+          }
+          .dark .tradora-bg {
+            background: linear-gradient(135deg, #161B22 0%, #1F2937 100%);
+          }
+        `}</style>
+
+        {/* TRADORA with bg — app icon + text, curved right side */}
+        <div className="tradora-bg flex items-center gap-2 pl-3 pr-5 py-2.5">
+          <img
+              src={tradoaLogo}
+              alt="Tradora"
+            style={{ width: 28, height: 28, borderRadius: 8, objectFit: 'cover' }}
+          />
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: '0.04em', lineHeight: 1 }}
+            className="text-gray-900 dark:text-white"
+          >
+            TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
+          </span>
+        </div>
+
+        {/* Icons — outside the bg, no background */}
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate('search')} className="w-9 h-9 flex items-center justify-center">
+            <Search className="w-5 h-5 text-foreground" />
+          </button>
+          <button className="relative w-9 h-9 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-foreground" />
+            <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">3</span>
+          </button>
         </div>
       </header>
 
       {/* Goods / Services Section */}
-      <section className="mt-3">
-        {/* Tabs — Goods LEFT, Services RIGHT */}
-        <div className="flex px-4 mb-3 border-b border-border/50">
+      <section className="mt-4">
+        {/* Tabs — Goods LEFT, Services RIGHT, padded away from edges */}
+        <div className="flex px-10 mb-3 border-b border-border/50">
           <button
             onClick={() => setActiveTab('goods')}
             className={`flex-1 pb-2 text-sm font-bold text-left relative transition-colors ${
@@ -134,9 +126,9 @@ export default function HomeScreen() {
           </button>
         </div>
 
-        {/* Goods — sellers, horizontal scroll, tall portrait cards */}
+        {/* Goods — sellers, horizontal scroll */}
         {activeTab === 'goods' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-10 pb-3">
             {sellers.map((seller, i) => (
               <motion.div
                 key={seller.id}
@@ -154,13 +146,10 @@ export default function HomeScreen() {
                     (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=400`;
                   }}
                 />
-                {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                {/* Progress bar */}
                 <div className="absolute top-2.5 left-2.5 right-2.5 h-[3px] bg-white/20 rounded-full">
                   <div className="h-full bg-primary rounded-full" style={{ width: `${40 + (i * 18) % 55}%` }} />
                 </div>
-                {/* Avatar ring */}
                 <div className="absolute top-6 left-3">
                   <div className="p-[2.5px] rounded-full" style={{ background: 'linear-gradient(135deg, #FB8C00, #FFA726)' }}>
                     <div className="bg-black p-[2px] rounded-full">
@@ -170,7 +159,6 @@ export default function HomeScreen() {
                     </div>
                   </div>
                 </div>
-                {/* Bottom info */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">
                   <p className="text-white text-xs font-bold line-clamp-1">{seller.name}</p>
                   <p className="text-white/60 text-[10px] mt-0.5">
@@ -186,9 +174,9 @@ export default function HomeScreen() {
           </div>
         )}
 
-        {/* Services — providers, horizontal scroll, tall portrait cards */}
+        {/* Services — providers, horizontal scroll */}
         {activeTab === 'services' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-10 pb-3">
             {providers.map((provider, i) => (
               <motion.div
                 key={provider.id}
@@ -207,11 +195,9 @@ export default function HomeScreen() {
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-                {/* Progress bar */}
                 <div className="absolute top-2.5 left-2.5 right-2.5 h-[3px] bg-white/20 rounded-full">
                   <div className="h-full bg-orange-400 rounded-full" style={{ width: `${35 + (i * 22) % 55}%` }} />
                 </div>
-                {/* Avatar ring — blue for services */}
                 <div className="absolute top-6 left-3">
                   <div className="p-[2.5px] rounded-full" style={{ background: 'linear-gradient(135deg, #60A5FA, #818CF8)' }}>
                     <div className="bg-black p-[2px] rounded-full">
@@ -221,11 +207,9 @@ export default function HomeScreen() {
                     </div>
                   </div>
                 </div>
-                {/* Play button center */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
                   <Play className="w-4 h-4 text-white fill-white ml-0.5" />
                 </div>
-                {/* Bottom info */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">
                   <p className="text-white text-xs font-bold line-clamp-1">{provider.name}</p>
                   <p className="text-white/60 text-[10px] mt-0.5">{provider.location}</p>
