@@ -28,7 +28,6 @@ import {
   Calendar,
   Droplets,
   TrendingUp as Trending,
-  Download,
   MapPin,
   Play,
 } from 'lucide-react';
@@ -392,21 +391,14 @@ export default function HomeScreen() {
         </div>
       </section>
 
-      {/* App Download CTA */}
-      <section className="px-4 mt-6 mb-8">
-        <div className="bg-gradient-to-br from-primary to-orange-600 rounded-2xl p-5 text-white">
-          <h4 className="text-lg font-bold">Get the TRADORA App</h4>
-          <p className="text-white/80 text-sm mt-1">Shop and book services on the go!</p>
-          <div className="flex gap-3 mt-4">
-            <button className="flex-1 bg-white text-foreground rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs font-semibold">
-              <Download className="w-4 h-4" /> App Store
-            </button>
-            <button className="flex-1 bg-white text-foreground rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs font-semibold">
-              <Download className="w-4 h-4" /> Play Store
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* Footer */}
+      <div className="flex justify-center pb-28 pt-6">
+        <span style={{ fontFamily: "'Exo 2', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.05em' }}
+          className="text-black dark:text-white"
+        >
+          by chAs
+        </span>
+      </div>
     </div>
   );
 }
