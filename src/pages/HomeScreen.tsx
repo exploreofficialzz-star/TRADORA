@@ -60,23 +60,23 @@ export default function HomeScreen() {
     <div className="min-h-full">
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
 
-      {/* Header — bg ONLY behind TRADORA, curved bottom-right, icons outside */}
-      <header className="sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+      {/* Header — bg flush to top & left edges, only bottom-right curved */}
+      <header className="sticky top-0 z-40 flex items-center justify-between pr-4">
         <style>{`
           .tradora-bg {
             background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-            border-radius: 12px 40px 40px 12px;
+            border-radius: 0 0 40px 0;
+            padding: 14px 28px 14px 16px;
           }
           .dark .tradora-bg {
             background: linear-gradient(135deg, #161B22 0%, #1F2937 100%);
           }
         `}</style>
 
-        {/* TRADORA with bg — app icon + text, curved right side */}
-        <div className="tradora-bg flex items-center gap-2 pl-3 pr-5 py-2.5">
+        <div className="tradora-bg flex items-center gap-2">
           <img
-              src={tradoaLogo}
-              alt="Tradora"
+            src={tradoaLogo}
+            alt="Tradora"
             style={{ width: 28, height: 28, borderRadius: 8, objectFit: 'cover' }}
           />
           <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: '0.04em', lineHeight: 1 }}
@@ -86,7 +86,6 @@ export default function HomeScreen() {
           </span>
         </div>
 
-        {/* Icons — outside the bg, no background */}
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('search')} className="w-9 h-9 flex items-center justify-center">
             <Search className="w-5 h-5 text-foreground" />
@@ -100,8 +99,8 @@ export default function HomeScreen() {
 
       {/* Goods / Services Section */}
       <section className="mt-4">
-        {/* Tabs — Goods LEFT, Services RIGHT, padded away from edges */}
-        <div className="flex px-10 mb-3 border-b border-border/50">
+        {/* Tabs — Goods LEFT, Services RIGHT, pushed toward center */}
+        <div className="flex px-16 mb-3 border-b border-border/50">
           <button
             onClick={() => setActiveTab('goods')}
             className={`flex-1 pb-2 text-sm font-bold text-left relative transition-colors ${
