@@ -65,8 +65,8 @@ export default function HomeScreen() {
         <style>{`
           .tradora-bg {
             background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-            border-radius: 0 0 40px 0;
-            padding: 14px 28px 14px 16px;
+            border-radius: 0 0 48px 0;
+            padding: 18px 36px 18px 16px;
           }
           .dark .tradora-bg {
             background: linear-gradient(135deg, #161B22 0%, #1F2937 100%);
@@ -77,9 +77,9 @@ export default function HomeScreen() {
           <img
             src={tradoaLogo}
             alt="Tradora"
-            style={{ width: 28, height: 28, borderRadius: 8, objectFit: 'cover' }}
+            style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }}
           />
-          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 28, letterSpacing: '0.04em', lineHeight: 1 }}
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 34, letterSpacing: '0.04em', lineHeight: 1 }}
             className="text-gray-900 dark:text-white"
           >
             TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
@@ -100,7 +100,7 @@ export default function HomeScreen() {
       {/* Goods / Services Section */}
       <section className="mt-4">
         {/* Tabs — Goods LEFT, Services RIGHT, pushed toward center */}
-        <div className="flex px-16 mb-3 border-b border-border/50">
+        <div className="flex px-24 mb-3 border-b border-border/50">
           <button
             onClick={() => setActiveTab('goods')}
             className={`flex-1 pb-2 text-sm font-bold text-left relative transition-colors ${
@@ -127,7 +127,7 @@ export default function HomeScreen() {
 
         {/* Goods — sellers, horizontal scroll */}
         {activeTab === 'goods' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-10 pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-3">
             {sellers.map((seller, i) => (
               <motion.div
                 key={seller.id}
@@ -175,7 +175,7 @@ export default function HomeScreen() {
 
         {/* Services — providers, horizontal scroll */}
         {activeTab === 'services' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-10 pb-3">
+          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-3">
             {providers.map((provider, i) => (
               <motion.div
                 key={provider.id}
