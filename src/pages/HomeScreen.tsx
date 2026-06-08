@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
-import { products, services, productCategories, serviceCategories, sellers, providers, testimonials } from '@/data';
+import { products, services, productCategories, serviceCategories, sellers, providers } from '@/data';
 import {
   Search,
   Bell,
@@ -28,8 +28,8 @@ import {
   Droplets,
   TrendingUp as Trending,
   Download,
-  Quote,
   MapPin,
+  Play,
 } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -44,16 +44,90 @@ function CategoryIcon({ iconName }: { iconName: string }) {
   return <Icon className="w-5 h-5" />;
 }
 
+// Seller avatars with gradient rings — like Stories
+function SellerStory({ seller, index }: { seller: typeof sellers[0]; index: number }) {
+  const gradients = [
+    'from-orange-400 to-pink-500',
+    'from-purple-500 to-blue-500',
+    'from-green-400 to-teal-500',
+    'from-yellow-400 to-orange-500',
+    'from-pink-500 to-rose-500',
+    'from-blue-500 to-cyan-400',
+  ];
+  const grad = gradients[index % gradients.length];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.06 }}
+      className="flex flex-col items-center min-w-[72px] cursor-pointer"
+    >
+      {/* Gradient ring */}
+      <div className={`bg-gradient-to-br ${grad} p-[2.5px] rounded-full`}>
+        <div className="bg-background p-[2px] rounded-full">
+          <div className="w-14 h-14 rounded-full overflow-hidden bg-muted">
+            <img
+              src={seller.avatar}
+              alt={seller.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=100`;
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      <span className="text-[10px] font-medium mt-1.5 text-center line-clamp-1 w-full px-1">{seller.name}</span>
+    </motion.div>
+  );
+}
+
+// Service provider reel card
+function ServiceReel({ provider, index }: { provider: typeof providers[0]; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.08 }}
+      className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden cursor-pointer flex-shrink-0"
+      style={{ background: 'linear-gradient(160deg, #1a1f2e, #0D1117)' }}
+    >
+      <img
+        src={provider.avatar}
+        alt={provider.name}
+        className="w-full h-full object-cover opacity-70"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=1a1f2e&color=FB8C00&size=200`;
+        }}
+      />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+      {/* Play button */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+        <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+      </div>
+      {/* Bottom info */}
+      <div className="absolute bottom-0 left-0 right-0 p-2">
+        <p className="text-white text-[10px] font-semibold line-clamp-1">{provider.name}</p>
+        <p className="text-white/60 text-[9px] line-clamp-1">{provider.location}</p>
+      </div>
+      {/* Ring indicator */}
+      <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/30 rounded-full">
+        <div className="h-full bg-orange-400 rounded-full" style={{ width: '60%' }} />
+      </div>
+    </motion.div>
+  );
+}
+
 export default function HomeScreen() {
   const { navigate } = useApp();
+  const [activeTab, setActiveTab] = useState<'stories' | 'reels'>('stories');
   const [activeCategory, setActiveCategory] = useState<'products' | 'services'>('products');
   const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.08]);
 
   const categories = activeCategory === 'products' ? productCategories : serviceCategories;
   const featuredProducts = products.slice(0, 4);
@@ -63,138 +137,96 @@ export default function HomeScreen() {
   return (
     <div className="min-h-full">
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
+
       {/* Header */}
       <header className="sticky top-0 z-40 px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Brand name — bigger */}
-          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 42, letterSpacing: '0.03em', lineHeight: 1 }}
+          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: '0.03em', lineHeight: 1 }}
             className="text-gray-900 dark:text-white"
           >
             TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
           </span>
-          {/* Right icons: search + bell — same size, no bg on search */}
           <div className="flex items-center gap-3">
             <button onClick={() => navigate('search')} className="relative w-9 h-9 flex items-center justify-center">
               <Search className="w-5 h-5 text-foreground" />
             </button>
             <button className="relative w-9 h-9 flex items-center justify-center">
               <Bell className="w-5 h-5 text-foreground" />
-              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">
-                3
-              </span>
+              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">3</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <motion.section
-        ref={heroRef}
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative mx-4 mt-4 rounded-2xl overflow-hidden"
-
-      >
-        <div className="relative h-48 rounded-2xl overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #0D1117 0%, #1a1f2e 50%, #0D1117 100%)' }}
-        >
-          {/* Decorative orange glow blobs */}
-          <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-20"
-            style={{ background: 'radial-gradient(circle, #FB8C00, transparent)', filter: 'blur(30px)', transform: 'translate(20%, -20%)' }}
-          />
-          <div className="absolute bottom-0 left-1/2 w-32 h-32 rounded-full opacity-10"
-            style={{ background: 'radial-gradient(circle, #FFA726, transparent)', filter: 'blur(25px)' }}
-          />
-          {/* Grid overlay */}
-          <div className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)',
-              backgroundSize: '28px 28px',
-            }}
-          />
-          <div className="absolute inset-0 flex flex-col justify-center px-6">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 mb-2"
+      {/* Stories / Reels Section */}
+      <section className="mt-2">
+        {/* Tabs */}
+        <div className="flex px-4 gap-6 mb-3 border-b border-border/50">
+          {(['stories', 'reels'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-2 text-sm font-semibold capitalize relative transition-colors ${
+                activeTab === tab ? 'text-foreground' : 'text-muted-foreground'
+              }`}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
-              <span className="text-orange-400 text-[10px] font-bold tracking-[0.25em] uppercase">
-                Tradora Online Marketplace
-              </span>
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-white font-bold leading-tight"
-              style={{ fontSize: 22 }}
-            >
-              Buy. Sell. Connect.<br />
-              <span style={{ color: '#FB8C00' }}>All in one place.</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-white/50 text-xs mt-2"
-            >
-              Shop products & book services near you
-            </motion.p>
-            <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-3 self-start px-4 py-1.5 rounded-lg text-xs font-bold text-white"
-              style={{ background: 'linear-gradient(90deg, #FB8C00, #FFA726)' }}
-            >
-              Explore Now →
-            </motion.button>
-          </div>
+              {tab === 'stories' ? 'Stories' : 'Reels'}
+              {activeTab === tab && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+                />
+              )}
+            </button>
+          ))}
         </div>
-      </motion.section>
+
+        {/* Stories — sellers with product goods */}
+        {activeTab === 'stories' && (
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+            {sellers.map((seller, i) => (
+              <SellerStory key={seller.id} seller={seller} index={i} />
+            ))}
+          </div>
+        )}
+
+        {/* Reels — service providers */}
+        {activeTab === 'reels' && (
+          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+            {providers.map((provider, i) => (
+              <ServiceReel key={provider.id} provider={provider} index={i} />
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Categories Section */}
-      <section className="px-4 mt-6">
+      <section className="px-4 mt-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold">Categories</h3>
           <div className="flex bg-muted rounded-lg p-0.5">
             <button
               onClick={() => setActiveCategory('products')}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-                activeCategory === 'products'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              Products
-            </button>
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${activeCategory === 'products' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
+            >Products</button>
             <button
               onClick={() => setActiveCategory('services')}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-                activeCategory === 'services'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              Services
-            </button>
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${activeCategory === 'services' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
+            >Services</button>
           </div>
         </div>
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
           {categories.map((cat, i) => (
             <motion.button
               key={cat.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="flex flex-col items-center gap-1.5 min-w-[64px]"
+              className="flex flex-col items-center min-w-[72px] bg-muted/60 rounded-2xl p-3 gap-2"
+              whileTap={{ scale: 0.94 }}
             >
-              <div className="w-14 h-14 rounded-xl bg-muted flex items-center justify-center text-primary">
-                <CategoryIcon iconName={cat.icon} />
-              </div>
-              <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">
-                {cat.name}
-              </span>
+              <div className="text-primary"><CategoryIcon iconName={cat.icon} /></div>
+              <span className="text-[10px] text-center font-medium line-clamp-1">{cat.name}</span>
             </motion.button>
           ))}
         </div>
@@ -212,38 +244,29 @@ export default function HomeScreen() {
           {featuredProducts.map((product, i) => (
             <motion.button
               key={product.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
               onClick={() => navigate('productDetail', { selectedProductId: product.id })}
-              className="bg-card rounded-xl overflow-hidden border border-border/50 text-left"
-              whileTap={{ scale: 0.96 }}
+              className="bg-card rounded-2xl overflow-hidden border border-border/50 text-left"
+              whileTap={{ scale: 0.97 }}
             >
               <div className="relative aspect-square">
                 <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                {product.badge && (
-                  <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    {product.badge}
-                  </span>
-                )}
-                <button className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center">
-                  <Heart className="w-3.5 h-3.5 text-muted-foreground" />
+                <div className="absolute top-2 left-2 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{product.badge}</div>
+                <button className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 flex items-center justify-center">
+                  <Heart className="w-3.5 h-3.5 text-gray-600" />
                 </button>
               </div>
               <div className="p-2.5">
-                <p className="text-xs font-medium line-clamp-1">{product.name}</p>
-                <div className="flex items-center gap-1 mt-1">
+                <p className="text-xs font-semibold line-clamp-1">{product.name}</p>
+                <div className="flex items-center gap-1.5 mt-1">
                   <span className="text-sm font-bold text-primary">${product.price}</span>
-                  {product.originalPrice && (
-                    <span className="text-[10px] text-muted-foreground line-through">
-                      ${product.originalPrice}
-                    </span>
-                  )}
+                  {product.originalPrice && <span className="text-[10px] text-muted-foreground line-through">${product.originalPrice}</span>}
                 </div>
                 <div className="flex items-center gap-1 mt-1">
                   <Star className="w-3 h-3 fill-primary text-primary" />
                   <span className="text-[10px] text-muted-foreground">{product.rating}</span>
-                  <span className="text-[10px] text-muted-foreground">({product.reviews})</span>
                 </div>
               </div>
             </motion.button>
@@ -254,45 +277,30 @@ export default function HomeScreen() {
       {/* Featured Services */}
       <section className="px-4 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Top Services</h3>
+          <h3 className="text-lg font-semibold">Featured Services</h3>
           <button className="flex items-center gap-1 text-xs text-primary font-medium">
             See All <ChevronRight className="w-3 h-3" />
           </button>
         </div>
-        <div className="space-y-3">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
           {featuredServices.map((service, i) => (
             <motion.button
               key={service.id}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              onClick={() => navigate('serviceDetail', { selectedServiceId: service.id })}
-              className="flex gap-3 bg-card rounded-xl overflow-hidden border border-border/50 text-left w-full"
-              whileTap={{ scale: 0.98 }}
+              transition={{ delay: i * 0.08 }}
+              className="min-w-[160px] bg-card rounded-2xl overflow-hidden border border-border/50 text-left flex-shrink-0"
+              whileTap={{ scale: 0.97 }}
             >
-              <div className="relative w-28 h-28 flex-shrink-0">
+              <div className="relative h-24">
                 <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
-                {service.badge && (
-                  <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    {service.badge}
-                  </span>
-                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               </div>
-              <div className="flex-1 py-2 pr-3">
-                <h4 className="text-sm font-semibold line-clamp-1">{service.name}</h4>
-                <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{service.description}</p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <Star className="w-3 h-3 fill-primary text-primary" />
-                  <span className="text-[11px]">{service.rating}</span>
-                  <span className="text-[11px] text-muted-foreground">({service.reviews} reviews)</span>
-                </div>
+              <div className="p-2.5">
+                <p className="text-xs font-semibold line-clamp-1">{service.name}</p>
                 <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-sm font-bold text-primary">
-                    ${service.price}<span className="text-[10px] font-normal text-muted-foreground">/{service.priceUnit.replace('per ', '')}</span>
-                  </span>
-                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                    <MapPin className="w-3 h-3" />{service.location}
-                  </span>
+                  <span className="text-sm font-bold text-primary">${service.price}<span className="text-[10px] font-normal text-muted-foreground">/{service.priceUnit.replace('per ', '')}</span></span>
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><MapPin className="w-3 h-3" />{service.location}</span>
                 </div>
               </div>
             </motion.button>
@@ -325,125 +333,17 @@ export default function HomeScreen() {
               <div className="relative aspect-[3/4]">
                 <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                  <Trending className="w-3 h-3" />
-                  Hot
+                  <Trending className="w-3 h-3" /> Hot
                 </div>
               </div>
               <div className="p-2">
                 <p className="text-[11px] font-medium line-clamp-1">{product.name}</p>
                 <div className="flex items-center justify-between mt-1">
                   <span className="text-sm font-bold text-primary">${product.price}</span>
-                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                    <Heart className="w-3 h-3" />{product.likes}
-                  </span>
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><Heart className="w-3 h-3" />{product.likes}</span>
                 </div>
               </div>
             </motion.button>
-          ))}
-        </div>
-      </section>
-
-      {/* Top Sellers */}
-      <section className="px-4 mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Top Sellers</h3>
-          <button className="flex items-center gap-1 text-xs text-primary font-medium">
-            See All <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-          {sellers.map((seller, i) => (
-            <motion.div
-              key={seller.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex flex-col items-center min-w-[80px]"
-            >
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-orange-400 p-0.5">
-                  <div className="w-full h-full rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                    <ShoppingBag className="w-6 h-6 text-muted-foreground" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                  {seller.rating}
-                </div>
-              </div>
-              <span className="text-[11px] font-medium mt-2 text-center line-clamp-1">{seller.name}</span>
-              <span className="text-[10px] text-muted-foreground">{seller.followers >= 1000 ? `${(seller.followers / 1000).toFixed(1)}k` : seller.followers} followers</span>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Top Service Providers */}
-      <section className="px-4 mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Top Providers</h3>
-          <button className="flex items-center gap-1 text-xs text-primary font-medium">
-            See All <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-          {providers.map((provider, i) => (
-            <motion.div
-              key={provider.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex flex-col items-center min-w-[80px]"
-            >
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 p-0.5">
-                  <div className="w-full h-full rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                    <Wrench className="w-6 h-6 text-muted-foreground" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                  {provider.rating}
-                </div>
-              </div>
-              <span className="text-[11px] font-medium mt-2 text-center line-clamp-1">{provider.name}</span>
-              <span className="text-[10px] text-muted-foreground">{provider.location}</span>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="px-4 mt-6">
-        <h3 className="text-lg font-semibold mb-3">What People Say</h3>
-        <div className="space-y-3">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-xl p-4 border border-border/50"
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Quote className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold">{t.name}</span>
-                    <div className="flex">
-                      {Array.from({ length: 5 }).map((_, j) => (
-                        <Star
-                          key={j}
-                          className={`w-3 h-3 ${j < t.rating ? 'fill-primary text-primary' : 'text-muted'}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{t.comment}</p>
-                  <span className="text-[10px] text-muted-foreground mt-2 block">{t.date}</span>
-                </div>
-              </div>
-            </motion.div>
           ))}
         </div>
       </section>
@@ -455,12 +355,10 @@ export default function HomeScreen() {
           <p className="text-white/80 text-sm mt-1">Shop and book services on the go!</p>
           <div className="flex gap-3 mt-4">
             <button className="flex-1 bg-white text-foreground rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs font-semibold">
-              <Download className="w-4 h-4" />
-              App Store
+              <Download className="w-4 h-4" /> App Store
             </button>
             <button className="flex-1 bg-white text-foreground rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs font-semibold">
-              <Download className="w-4 h-4" />
-              Play Store
+              <Download className="w-4 h-4" /> Play Store
             </button>
           </div>
         </div>
