@@ -2,7 +2,7 @@ import { useState } from 'react';
 import tradoaLogo from '@/assets/tradora-logo.jpg';
 import { motion } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
-import { products, services, productCategories, serviceCategories, sellers, providers } from '@/data';
+import { products, services, sellers, providers } from '@/data';
 import {
   Search,
   Bell,
@@ -51,7 +51,6 @@ export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState<'goods' | 'services'>('goods');
   const [activeCategory, setActiveCategory] = useState<'products' | 'services'>('products');
 
-  const categories = activeCategory === 'products' ? productCategories : serviceCategories;
   const featuredProducts = products.slice(0, 4);
   const featuredServices = services.slice(0, 4);
   const trendingProducts = [...products].sort((a, b) => b.likes - a.likes).slice(0, 4);
@@ -231,7 +230,7 @@ export default function HomeScreen() {
             <button
               onClick={() => setActiveCategory('products')}
               className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${activeCategory === 'products' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
-            >Products</button>
+            >Goods</button>
             <button
               onClick={() => setActiveCategory('services')}
               className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${activeCategory === 'services' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
@@ -239,12 +238,34 @@ export default function HomeScreen() {
           </div>
         </div>
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-          {categories.map((cat, i) => (
+          {(activeCategory === 'products' ? [
+            { id: 'fashion', name: 'Fashion', icon: 'Shirt' },
+            { id: 'native', name: 'Native Wear', icon: 'Sparkles' },
+            { id: 'shoes', name: 'Shoes', icon: 'Footprints' },
+            { id: 'bags', name: 'Bags', icon: 'ShoppingBag' },
+            { id: 'jewelry', name: 'Jewelry', icon: 'Gem' },
+            { id: 'electronics', name: 'Electronics', icon: 'Smartphone' },
+            { id: 'furniture', name: 'Furniture', icon: 'Sofa' },
+            { id: 'gadgets', name: 'Gadgets', icon: 'Headphones' },
+            { id: 'food', name: 'Food & Drinks', icon: 'UtensilsCrossed' },
+            { id: 'others-p', name: 'Others', icon: 'ShoppingBag' },
+          ] : [
+            { id: 'beauty', name: 'Beauty', icon: 'Scissors' },
+            { id: 'photography', name: 'Photography', icon: 'Camera' },
+            { id: 'design', name: 'Design', icon: 'PenTool' },
+            { id: 'tech', name: 'Tech & IT', icon: 'Code' },
+            { id: 'tutoring', name: 'Tutoring', icon: 'BookOpen' },
+            { id: 'cleaning', name: 'Cleaning', icon: 'Droplets' },
+            { id: 'plumbing', name: 'Plumbing', icon: 'Wrench' },
+            { id: 'events', name: 'Events', icon: 'Calendar' },
+            { id: 'interior', name: 'Interior', icon: 'Home' },
+            { id: 'others-s', name: 'Others', icon: 'Sparkles' },
+          ]).map((cat, i) => (
             <motion.button
               key={cat.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
+              transition={{ delay: i * 0.04 }}
               className="flex flex-col items-center min-w-[72px] bg-muted/60 rounded-2xl p-3 gap-2"
               whileTap={{ scale: 0.94 }}
             >

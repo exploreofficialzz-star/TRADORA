@@ -82,8 +82,10 @@ export default function MainLayout() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border/50">
-        <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-2">
+      <nav className="fixed bottom-4 left-4 right-4 z-50 rounded-2xl overflow-hidden shadow-2xl"
+        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+      >
+        <div className="flex items-center justify-around h-14 max-w-lg mx-auto px-2 glass border border-border/40 rounded-2xl">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
             const Icon = tab.icon;
@@ -91,7 +93,7 @@ export default function MainLayout() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className="relative flex flex-col items-center justify-center w-16 h-full"
+                className="relative flex flex-col items-center justify-center w-14 h-full"
               >
                 <motion.div
                   animate={{
@@ -101,17 +103,15 @@ export default function MainLayout() {
                   transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 >
                   <Icon
-                    className={`w-6 h-6 transition-colors ${
+                    className={`w-5 h-5 transition-colors ${
                       isActive ? 'text-primary' : 'text-muted-foreground'
                     }`}
                     strokeWidth={isActive ? 2.5 : 1.5}
                   />
                 </motion.div>
                 <span
-                  className={`text-[10px] mt-0.5 transition-colors ${
-                    isActive
-                      ? 'text-primary font-semibold'
-                      : 'text-muted-foreground'
+                  className={`text-[9px] mt-0.5 transition-colors ${
+                    isActive ? 'text-primary font-semibold' : 'text-muted-foreground'
                   }`}
                 >
                   {tab.label}
@@ -119,7 +119,7 @@ export default function MainLayout() {
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -bottom-0 w-8 h-0.5 bg-primary rounded-full"
+                    className="absolute -bottom-0 w-6 h-0.5 bg-primary rounded-full"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
