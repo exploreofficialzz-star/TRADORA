@@ -44,85 +44,10 @@ function CategoryIcon({ iconName }: { iconName: string }) {
   return <Icon className="w-5 h-5" />;
 }
 
-// Seller avatars with gradient rings — like Stories
-function SellerStory({ seller, index }: { seller: typeof sellers[0]; index: number }) {
-  const gradients = [
-    'from-orange-400 to-pink-500',
-    'from-purple-500 to-blue-500',
-    'from-green-400 to-teal-500',
-    'from-yellow-400 to-orange-500',
-    'from-pink-500 to-rose-500',
-    'from-blue-500 to-cyan-400',
-  ];
-  const grad = gradients[index % gradients.length];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: index * 0.06 }}
-      className="flex flex-col items-center min-w-[72px] cursor-pointer"
-    >
-      {/* Gradient ring */}
-      <div className={`bg-gradient-to-br ${grad} p-[2.5px] rounded-full`}>
-        <div className="bg-background p-[2px] rounded-full">
-          <div className="w-14 h-14 rounded-full overflow-hidden bg-muted">
-            <img
-              src={seller.avatar}
-              alt={seller.name}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=100`;
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <span className="text-[10px] font-medium mt-1.5 text-center line-clamp-1 w-full px-1">{seller.name}</span>
-    </motion.div>
-  );
-}
-
-// Service provider reel card
-function ServiceReel({ provider, index }: { provider: typeof providers[0]; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.08 }}
-      className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden cursor-pointer flex-shrink-0"
-      style={{ background: 'linear-gradient(160deg, #1a1f2e, #0D1117)' }}
-    >
-      <img
-        src={provider.avatar}
-        alt={provider.name}
-        className="w-full h-full object-cover opacity-70"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=1a1f2e&color=FB8C00&size=200`;
-        }}
-      />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-      {/* Play button */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-        <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
-      </div>
-      {/* Bottom info */}
-      <div className="absolute bottom-0 left-0 right-0 p-2">
-        <p className="text-white text-[10px] font-semibold line-clamp-1">{provider.name}</p>
-        <p className="text-white/60 text-[9px] line-clamp-1">{provider.location}</p>
-      </div>
-      {/* Ring indicator */}
-      <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/30 rounded-full">
-        <div className="h-full bg-orange-400 rounded-full" style={{ width: '60%' }} />
-      </div>
-    </motion.div>
-  );
-}
 
 export default function HomeScreen() {
   const { navigate } = useApp();
-  const [activeTab, setActiveTab] = useState<'stories' | 'reels'>('stories');
+  const [activeTab, setActiveTab] = useState<'goods' | 'services'>('goods');
   const [activeCategory, setActiveCategory] = useState<'products' | 'services'>('products');
 
   const categories = activeCategory === 'products' ? productCategories : serviceCategories;
@@ -154,11 +79,11 @@ export default function HomeScreen() {
         </div>
       </header>
 
-      {/* Stories / Reels Section */}
+      {/* Goods / Services Section */}
       <section className="mt-2">
         {/* Tabs */}
         <div className="flex px-4 gap-6 mb-3 border-b border-border/50">
-          {(['stories', 'reels'] as const).map((tab) => (
+          {(['goods', 'services'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -166,7 +91,7 @@ export default function HomeScreen() {
                 activeTab === tab ? 'text-foreground' : 'text-muted-foreground'
               }`}
             >
-              {tab === 'stories' ? 'Stories' : 'Reels'}
+              {tab === 'goods' ? 'Goods' : 'Services'}
               {activeTab === tab && (
                 <motion.div
                   layoutId="activeTab"
@@ -177,20 +102,84 @@ export default function HomeScreen() {
           ))}
         </div>
 
-        {/* Stories — sellers with product goods */}
-        {activeTab === 'stories' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+        {/* Goods — seller vertical rectangle cards */}
+        {activeTab === 'goods' && (
+          <div className="flex gap-2.5 overflow-x-auto no-scrollbar px-4 pb-3">
             {sellers.map((seller, i) => (
-              <SellerStory key={seller.id} seller={seller} index={i} />
+              <motion.div
+                key={seller.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.06 }}
+                className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+              >
+                <img
+                  src={seller.avatar}
+                  alt={seller.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=200`;
+                  }}
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
+                {/* Top progress bar */}
+                <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/25 rounded-full">
+                  <div className="h-full bg-primary rounded-full" style={{ width: `${40 + (i * 15) % 60}%` }} />
+                </div>
+                {/* Avatar ring top-left */}
+                <div className="absolute top-4 left-2">
+                  <div className="w-7 h-7 rounded-full border-2 border-primary overflow-hidden">
+                    <img src={seller.avatar} alt="" className="w-full h-full object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&size=50`; }}
+                    />
+                  </div>
+                </div>
+                {/* Bottom info */}
+                <div className="absolute bottom-0 left-0 right-0 p-2">
+                  <p className="text-white text-[10px] font-semibold line-clamp-1">{seller.name}</p>
+                  <p className="text-white/60 text-[9px]">{seller.followers >= 1000 ? `${(seller.followers / 1000).toFixed(1)}k` : seller.followers} followers</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
 
-        {/* Reels — service providers */}
-        {activeTab === 'reels' && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 pb-3">
+        {/* Services — provider vertical rectangle cards */}
+        {activeTab === 'services' && (
+          <div className="flex gap-2.5 overflow-x-auto no-scrollbar px-4 pb-3">
             {providers.map((provider, i) => (
-              <ServiceReel key={provider.id} provider={provider} index={i} />
+              <motion.div
+                key={provider.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.06 }}
+                className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+                style={{ background: 'linear-gradient(160deg, #1a1f2e, #0D1117)' }}
+              >
+                <img
+                  src={provider.avatar}
+                  alt={provider.name}
+                  className="w-full h-full object-cover opacity-75"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=1a1f2e&color=FB8C00&size=200`;
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+                {/* Top progress bar */}
+                <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/25 rounded-full">
+                  <div className="h-full bg-orange-400 rounded-full" style={{ width: `${30 + (i * 20) % 70}%` }} />
+                </div>
+                {/* Play button */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+                </div>
+                {/* Bottom info */}
+                <div className="absolute bottom-0 left-0 right-0 p-2">
+                  <p className="text-white text-[10px] font-semibold line-clamp-1">{provider.name}</p>
+                  <p className="text-white/60 text-[9px]">{provider.location}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
