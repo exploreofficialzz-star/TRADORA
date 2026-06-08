@@ -59,47 +59,79 @@ export default function HomeScreen() {
     <div className="min-h-full">
       <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@800&display=swap" rel="stylesheet" />
 
-      {/* Header */}
-      <header className="sticky top-0 z-40 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 26, letterSpacing: '0.03em', lineHeight: 1 }}
-            className="text-gray-900 dark:text-white"
-          >
-            TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
-          </span>
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('search')} className="relative w-9 h-9 flex items-center justify-center">
-              <Search className="w-5 h-5 text-foreground" />
-            </button>
-            <button className="relative w-9 h-9 flex items-center justify-center">
-              <Bell className="w-5 h-5 text-foreground" />
-              <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">3</span>
-            </button>
+      {/* Header — market-themed background, adaptive to theme */}
+      <header className="sticky top-0 z-40">
+        {/* Market banner bg — light: warm cream gradient, dark: deep navy */}
+        <div
+          className="px-4 py-3 relative overflow-hidden"
+          style={{
+            background: 'var(--header-bg)',
+          }}
+        >
+          <style>{`
+            :root { --header-bg: linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 50%, #FFF8F0 100%); }
+            .dark { --header-bg: linear-gradient(135deg, #0D1117 0%, #161B22 50%, #0D1117 100%); }
+          `}</style>
+          {/* Decorative curved shapes */}
+          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-10 dark:opacity-5"
+            style={{ background: 'radial-gradient(circle, #FB8C00, transparent)' }} />
+          <div className="absolute right-10 bottom-0 w-16 h-16 rounded-full opacity-10 dark:opacity-5"
+            style={{ background: 'radial-gradient(circle, #FFA726, transparent)' }} />
+          {/* Subtle tag/price-tag shapes */}
+          <div className="absolute left-1/2 top-0 w-px h-full opacity-5 dark:opacity-10"
+            style={{ background: 'linear-gradient(to bottom, transparent, #FB8C00, transparent)' }} />
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-2">
+              {/* Small cart icon accent */}
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #FB8C00, #FFA726)' }}>
+                <ShoppingBag className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span style={{ fontFamily: "'Exo 2', sans-serif", fontWeight: 800, fontSize: 24, letterSpacing: '0.03em', lineHeight: 1 }}
+                className="text-gray-900 dark:text-white"
+              >
+                TR<span style={{ color: '#FB8C00' }}>A</span>DOR<span style={{ color: '#FB8C00' }}>A</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={() => navigate('search')} className="relative w-9 h-9 flex items-center justify-center">
+                <Search className="w-5 h-5 text-gray-700 dark:text-white" />
+              </button>
+              <button className="relative w-9 h-9 flex items-center justify-center">
+                <Bell className="w-5 h-5 text-gray-700 dark:text-white" />
+                <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">3</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Goods / Services Section */}
       <section className="mt-3">
-        {/* Tabs */}
-        <div className="flex px-4 gap-6 mb-3 border-b border-border/50">
-          {(['goods', 'services'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-2 text-sm font-bold capitalize relative transition-colors ${
-                activeTab === tab ? 'text-foreground' : 'text-muted-foreground'
-              }`}
-            >
-              {tab === 'goods' ? 'Goods' : 'Services'}
-              {activeTab === tab && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-primary rounded-full"
-                />
-              )}
-            </button>
-          ))}
+        {/* Tabs — Goods LEFT, Services RIGHT */}
+        <div className="flex px-4 mb-3 border-b border-border/50">
+          <button
+            onClick={() => setActiveTab('goods')}
+            className={`flex-1 pb-2 text-sm font-bold text-left relative transition-colors ${
+              activeTab === 'goods' ? 'text-foreground' : 'text-muted-foreground'
+            }`}
+          >
+            Goods
+            {activeTab === 'goods' && (
+              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 w-12 h-[2.5px] bg-primary rounded-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('services')}
+            className={`flex-1 pb-2 text-sm font-bold text-right relative transition-colors ${
+              activeTab === 'services' ? 'text-foreground' : 'text-muted-foreground'
+            }`}
+          >
+            Services
+            {activeTab === 'services' && (
+              <motion.div layoutId="activeTab" className="absolute bottom-0 right-0 w-16 h-[2.5px] bg-primary rounded-full" />
+            )}
+          </button>
         </div>
 
         {/* Goods — sellers, horizontal scroll, tall portrait cards */}
@@ -112,7 +144,7 @@ export default function HomeScreen() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.06 }}
                 className="relative flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer"
-                style={{ width: 150, height: 320 }}
+                style={{ width: 120, height: 200 }}
               >
                 <img
                   src={seller.avatar}
@@ -164,7 +196,7 @@ export default function HomeScreen() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.06 }}
                 className="relative flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer"
-                style={{ width: 150, height: 320, background: '#0D1117' }}
+                style={{ width: 120, height: 200, background: '#0D1117' }}
               >
                 <img
                   src={provider.avatar}
