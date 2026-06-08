@@ -47,7 +47,6 @@ function CategoryIcon({ iconName }: { iconName: string }) {
 
 export default function HomeScreen() {
   const { navigate } = useApp();
-  const [activeTab, setActiveTab] = useState<'goods' | 'services'>('goods');
   const [activeCategory, setActiveCategory] = useState<'products' | 'services'>('products');
 
   const categories = activeCategory === 'products' ? productCategories : serviceCategories;
@@ -79,110 +78,107 @@ export default function HomeScreen() {
         </div>
       </header>
 
-      {/* Goods / Services Section */}
-      <section className="mt-2">
-        {/* Tabs */}
-        <div className="flex px-4 gap-6 mb-3 border-b border-border/50">
-          {(['goods', 'services'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-2 text-sm font-semibold capitalize relative transition-colors ${
-                activeTab === tab ? 'text-foreground' : 'text-muted-foreground'
-              }`}
-            >
-              {tab === 'goods' ? 'Goods' : 'Services'}
-              {activeTab === tab && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
-                />
-              )}
-            </button>
-          ))}
-        </div>
+      {/* Goods & Services — Facebook Stories style, two columns */}
+      <section className="mt-3 px-5">
+        <div className="flex gap-3">
 
-        {/* Goods — seller vertical rectangle cards */}
-        {activeTab === 'goods' && (
-          <div className="flex gap-2.5 overflow-x-auto no-scrollbar px-4 pb-3">
-            {sellers.map((seller, i) => (
+          {/* LEFT — Goods */}
+          <div className="flex-1 flex flex-col gap-1.5">
+            <span className="text-xs font-bold text-foreground mb-1 pl-0.5">Goods</span>
+            {sellers.slice(0, 3).map((seller, i) => (
               <motion.div
                 key={seller.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.06 }}
-                className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.07 }}
+                className="relative w-full rounded-2xl overflow-hidden cursor-pointer flex-shrink-0"
+                style={{ height: 200 }}
               >
                 <img
                   src={seller.avatar}
                   alt={seller.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=200`;
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&background=FB8C00&color=fff&size=400`;
                   }}
                 />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
-                {/* Top progress bar */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                {/* Progress bar */}
                 <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/25 rounded-full">
-                  <div className="h-full bg-primary rounded-full" style={{ width: `${40 + (i * 15) % 60}%` }} />
+                  <div className="h-full bg-primary rounded-full" style={{ width: `${45 + (i * 18) % 50}%` }} />
                 </div>
-                {/* Avatar ring top-left */}
-                <div className="absolute top-4 left-2">
-                  <div className="w-7 h-7 rounded-full border-2 border-primary overflow-hidden">
-                    <img src={seller.avatar} alt="" className="w-full h-full object-cover"
-                      onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&size=50`; }}
-                    />
+                {/* Avatar ring */}
+                <div className="absolute top-4 left-2.5">
+                  <div className="p-[2px] rounded-full" style={{ background: 'linear-gradient(135deg, #FB8C00, #FFA726)' }}>
+                    <div className="bg-background p-[1.5px] rounded-full">
+                      <div className="w-8 h-8 rounded-full overflow-hidden">
+                        <img src={seller.avatar} alt="" className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(seller.name)}&size=50`; }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {/* Bottom info */}
-                <div className="absolute bottom-0 left-0 right-0 p-2">
-                  <p className="text-white text-[10px] font-semibold line-clamp-1">{seller.name}</p>
+                {/* Name */}
+                <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                  <p className="text-white text-[11px] font-bold line-clamp-1">{seller.name}</p>
                   <p className="text-white/60 text-[9px]">{seller.followers >= 1000 ? `${(seller.followers / 1000).toFixed(1)}k` : seller.followers} followers</p>
                 </div>
               </motion.div>
             ))}
           </div>
-        )}
 
-        {/* Services — provider vertical rectangle cards */}
-        {activeTab === 'services' && (
-          <div className="flex gap-2.5 overflow-x-auto no-scrollbar px-4 pb-3">
-            {providers.map((provider, i) => (
+          {/* RIGHT — Services */}
+          <div className="flex-1 flex flex-col gap-1.5">
+            <span className="text-xs font-bold text-foreground mb-1 pl-0.5">Services</span>
+            {providers.slice(0, 3).map((provider, i) => (
               <motion.div
                 key={provider.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.06 }}
-                className="relative min-w-[110px] h-[160px] rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
-                style={{ background: 'linear-gradient(160deg, #1a1f2e, #0D1117)' }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.07 + 0.1 }}
+                className="relative w-full rounded-2xl overflow-hidden cursor-pointer flex-shrink-0"
+                style={{ height: 200, background: 'linear-gradient(160deg, #1a1f2e, #0D1117)' }}
               >
                 <img
                   src={provider.avatar}
                   alt={provider.name}
-                  className="w-full h-full object-cover opacity-75"
+                  className="w-full h-full object-cover opacity-80"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=1a1f2e&color=FB8C00&size=200`;
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&background=1a1f2e&color=FB8C00&size=400`;
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-                {/* Top progress bar */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                {/* Progress bar */}
                 <div className="absolute top-2 left-2 right-2 h-0.5 bg-white/25 rounded-full">
-                  <div className="h-full bg-orange-400 rounded-full" style={{ width: `${30 + (i * 20) % 70}%` }} />
+                  <div className="h-full bg-orange-400 rounded-full" style={{ width: `${35 + (i * 22) % 55}%` }} />
+                </div>
+                {/* Avatar ring */}
+                <div className="absolute top-4 left-2.5">
+                  <div className="p-[2px] rounded-full" style={{ background: 'linear-gradient(135deg, #60A5FA, #818CF8)' }}>
+                    <div className="bg-background p-[1.5px] rounded-full">
+                      <div className="w-8 h-8 rounded-full overflow-hidden">
+                        <img src={provider.avatar} alt="" className="w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(provider.name)}&size=50`; }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 {/* Play button */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <Play className="w-3.5 h-3.5 text-white fill-white ml-0.5" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Play className="w-4 h-4 text-white fill-white ml-0.5" />
                 </div>
-                {/* Bottom info */}
-                <div className="absolute bottom-0 left-0 right-0 p-2">
-                  <p className="text-white text-[10px] font-semibold line-clamp-1">{provider.name}</p>
+                {/* Name */}
+                <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                  <p className="text-white text-[11px] font-bold line-clamp-1">{provider.name}</p>
                   <p className="text-white/60 text-[9px]">{provider.location}</p>
                 </div>
               </motion.div>
             ))}
           </div>
-        )}
+
+        </div>
       </section>
 
       {/* Categories Section */}
