@@ -82,10 +82,21 @@ export default function MainLayout() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-4 left-4 right-4 z-50 rounded-2xl overflow-hidden shadow-2xl"
-        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+      {/* Floating nav — same bg as TRADORA header, adaptive light/dark, cross-platform safe */}
+      <style>{`
+        .nav-bg {
+          background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+          border: 1px solid rgba(251, 140, 0, 0.15);
+        }
+        .dark .nav-bg {
+          background: linear-gradient(135deg, #161B22 0%, #1F2937 100%);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+      `}</style>
+      <nav className="fixed bottom-4 left-4 right-4 z-50 rounded-2xl shadow-2xl nav-bg"
+        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
       >
-        <div className="flex items-center justify-around h-14 max-w-lg mx-auto px-2 glass border border-border/40 rounded-2xl">
+        <div className="flex items-center justify-around h-14 max-w-lg mx-auto px-2">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
             const Icon = tab.icon;
@@ -104,21 +115,21 @@ export default function MainLayout() {
                 >
                   <Icon
                     className={`w-5 h-5 transition-colors ${
-                      isActive ? 'text-primary' : 'text-muted-foreground'
+                      isActive ? 'text-primary' : 'text-gray-400 dark:text-gray-500'
                     }`}
                     strokeWidth={isActive ? 2.5 : 1.5}
                   />
                 </motion.div>
                 <span
                   className={`text-[9px] mt-0.5 transition-colors ${
-                    isActive ? 'text-primary font-semibold' : 'text-muted-foreground'
+                    isActive ? 'text-primary font-semibold' : 'text-gray-400 dark:text-gray-500'
                   }`}
                 >
                   {tab.label}
                 </span>
                 {isActive && (
                   <motion.div
-                    layoutId="activeTab"
+                    layoutId="activeNavTab"
                     className="absolute -bottom-0 w-6 h-0.5 bg-primary rounded-full"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
